@@ -1,9 +1,9 @@
-﻿using System.Windows;
-using System;
-using System.IO;
-
-namespace NugetTemplatePackager
+﻿namespace NugetTemplatePackager
 {
+    using System.IO;
+    using System.Windows;
+    using NugetTemplateTools;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -16,18 +16,58 @@ namespace NugetTemplatePackager
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            //string vsixFileName = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates\WebApiConsole.vsix";
+            //string solutionPath = @"C:\Work\WebApiConsole";
 
-            var tempPath = Path.GetTempPath();
+            string vsixFileName = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates\MvcTwitterBootstrap.vsix";
+            string solutionPath = @"C:\Work\MvcBootstrap";
 
-            string path = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates\WebApiConsole.vsix.zip";
-            var x = new NugetTemplateTools.ProjectTemplate(path);
+            var appTempPath = Path.Combine(Path.GetTempPath(), "NugetTemplate");
 
-            var files = x.Unpack(@"C:\temp");
+            var extractedPackage = ExtractPackage(vsixFileName, appTempPath);
 
-            foreach (var file in files)
+            DispayExtractResults(extractedPackage);
+
+            var packagePath = Path.Combine(solutionPath, "packages");
+
+            extractedPackage.UpdatePackages(packagePath);
+
+            extractedPackage.UpdateContentTypes();
+
+            var packageId = extractedPackage.UpdateManifest(packagePath);
+
+            extractedPackage.RepackageTemplates(packageId, solutionPath);
+
+            // Recreate the vsix
+            var newVsixFileName = Path.Combine(appTempPath, Path.GetFileName(vsixFileName));
+            var newPackage = PackageWrapper.Create(newVsixFileName);
+            newPackage.AddDirectoryAndSave(extractedPackage.ExtractPath);
+        }
+
+        private static ExtractedPackage ExtractPackage(string path, string appTempPath)
+        {
+            ExtractedPackage extractedPackage;
+            using (var vsixPackage = PackageWrapper.Open(path))
             {
-                textBox1.Text += file + "\r\n";
+                extractedPackage = vsixPackage.Extract(appTempPath);
+            }
+            return extractedPackage;
+        }
+
+        private void DispayExtractResults(ExtractedPackage extractedPackage)
+        {
+            foreach (var part in extractedPackage.ExtractedParts)
+            {
+                textBox1.Text += part.ExtractedFileName + "\r\n";
+                textBox1.Text += part.Part.UriDescription + "\r\n";
+
+                if (part.Package != null)
+                {
+                    foreach (var zipPart in part.Package.ExtractedParts)
+                    {
+                        textBox1.Text += "    " + zipPart.ExtractedFileName + "\r\n";
+                    }
+                }
             }
         }
     }
