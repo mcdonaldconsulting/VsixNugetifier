@@ -48,6 +48,7 @@
     <Compile Include="ExtractedPart.cs" />
     <Compile Include="ExtractedPackage.cs" />
     <Compile Include="MiscellaneousExtensions.cs" />
+    <Compile Include="VsixNugetifierException.cs" />
     <Compile Include="PackageWrapper.cs" />
     <Compile Include="PartWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
