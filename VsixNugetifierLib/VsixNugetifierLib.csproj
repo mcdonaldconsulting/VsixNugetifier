@@ -8,8 +8,8 @@
     <ProjectGuid>{41A6C5EE-DB73-49CC-B78D-B4BD9EDE23AC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NugetTemplateTools</RootNamespace>
-    <AssemblyName>NugetTemplateTools</AssemblyName>
+    <RootNamespace>VsixNugetifierLib</RootNamespace>
+    <AssemblyName>VsixNugetifierLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -58,7 +58,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

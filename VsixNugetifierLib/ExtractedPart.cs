@@ -1,4 +1,4 @@
-﻿namespace NugetTemplateTools
+﻿namespace VsixNugetifierLib
 {
     public class ExtractedPart
     {

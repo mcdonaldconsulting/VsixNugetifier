@@ -2,7 +2,7 @@
 {
     using System.IO;
     using System.Windows;
-    using NugetTemplateTools;
+    using VsixNugetifierLib;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml

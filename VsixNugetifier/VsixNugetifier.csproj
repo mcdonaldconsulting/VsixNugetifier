@@ -93,9 +93,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NugetTemplateTools\NugetTemplateTools.csproj">
+    <ProjectReference Include="..\VsixNugetifierLib\VsixNugetifierLib.csproj">
       <Project>{41A6C5EE-DB73-49CC-B78D-B4BD9EDE23AC}</Project>
-      <Name>NugetTemplateTools</Name>
+      <Name>VsixNugetifierLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
