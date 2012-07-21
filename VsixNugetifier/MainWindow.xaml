@@ -1,4 +1,4 @@
-﻿<Window x:Class="NugetTemplatePackager.MainWindow"
+﻿<Window x:Class="VsixNugetifier.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525" FontFamily="Segoe UI">

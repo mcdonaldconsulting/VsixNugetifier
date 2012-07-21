@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NugetTemplatePackager.Properties
+namespace VsixNugetifier.Properties
 {
 
 

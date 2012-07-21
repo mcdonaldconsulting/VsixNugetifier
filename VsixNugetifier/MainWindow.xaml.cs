@@ -1,4 +1,4 @@
-﻿namespace NugetTemplatePackager
+﻿namespace VsixNugetifier
 {
     using System.IO;
     using System.Windows;

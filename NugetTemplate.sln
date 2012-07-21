@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetTemplatePackager", "NugetTemplatePackager\NugetTemplatePackager.csproj", "{8CDE6293-B33E-425F-9379-766DC3240D19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsixNugetifier", "VsixNugetifier\VsixNugetifier.csproj", "{8CDE6293-B33E-425F-9379-766DC3240D19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetTemplateTools", "NugetTemplateTools\NugetTemplateTools.csproj", "{41A6C5EE-DB73-49CC-B78D-B4BD9EDE23AC}"
 EndProject
