@@ -22,7 +22,7 @@
             string vsixFileName = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates\MvcTwitterBootstrap.vsix";
             string solutionPath = @"C:\Work\MvcBootstrap";
 
-            var appTempPath = Path.Combine(Path.GetTempPath(), "NugetTemplate");
+            var appTempPath = Path.Combine(Path.GetTempPath(), "VsixNugetifier");
 
             var extractedPackage = ExtractPackage(vsixFileName, appTempPath);
 
