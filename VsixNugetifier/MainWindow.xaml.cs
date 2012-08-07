@@ -1,5 +1,6 @@
 ﻿namespace VsixNugetifier
 {
+    using System;
     using System.IO;
     using System.Windows;
     using Microsoft.Win32;
@@ -17,39 +18,44 @@
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            string vsixFileName = txtFileName.Text;
-            string solutionPath = Path.GetDirectoryName(txtSolution.Text);
+            try
+            {
+                string vsixFileName = txtFileName.Text;
+                string solutionPath = Path.GetDirectoryName(txtSolution.Text);
 
-            var appTempPath = Path.Combine(Path.GetTempPath(), "VsixNugetifier");
+                var appTempPath = Path.Combine(Path.GetTempPath(), "VsixNugetifier");
 
-            var extractedPackage = ExtractPackage(vsixFileName, appTempPath);
+                var extractedPackage = ExtractPackage(vsixFileName, appTempPath);
 
-            DispayExtractResults(extractedPackage);
+                DispayExtractResults(extractedPackage);
 
-            var packagePath = Path.Combine(solutionPath, "packages");
+                var packagePath = Path.Combine(solutionPath, "packages");
 
-            extractedPackage.UpdatePackages(packagePath);
+                extractedPackage.UpdatePackages(packagePath);
 
-            extractedPackage.UpdateContentTypes();
+                extractedPackage.UpdateContentTypes();
 
-            var packageId = extractedPackage.UpdateManifest(packagePath);
+                var packageId = extractedPackage.UpdateManifest(packagePath);
 
-            extractedPackage.RepackageTemplates(packageId, solutionPath);
+                extractedPackage.RepackageTemplates(packageId, solutionPath);
 
-            // Recreate the vsix
-            var newVsixFileName = Path.Combine(appTempPath, Path.GetFileName(vsixFileName));
-            var newPackage = PackageWrapper.Create(newVsixFileName);
-            newPackage.AddDirectoryAndSave(extractedPackage.ExtractPath);
+                // Recreate the vsix
+                var newVsixFileName = Path.Combine(appTempPath, Path.GetFileName(vsixFileName));
+                var newPackage = PackageWrapper.Create(newVsixFileName);
+                newPackage.AddDirectoryAndSave(extractedPackage.ExtractPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, this.Title);
+            }
         }
 
         private static ExtractedPackage ExtractPackage(string path, string appTempPath)
         {
-            ExtractedPackage extractedPackage;
             using (var vsixPackage = PackageWrapper.Open(path))
             {
-                extractedPackage = vsixPackage.Extract(appTempPath);
+                return vsixPackage.Extract(appTempPath);
             }
-            return extractedPackage;
         }
 
         private void DispayExtractResults(ExtractedPackage extractedPackage)
