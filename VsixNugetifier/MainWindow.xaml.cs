@@ -2,6 +2,7 @@
 {
     using System.IO;
     using System.Windows;
+    using Microsoft.Win32;
     using VsixNugetifierLib;
 
     /// <summary>
@@ -16,11 +17,8 @@
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            //string vsixFileName = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates\WebApiConsole.vsix";
-            //string solutionPath = @"C:\Work\WebApiConsole";
-
-            string vsixFileName = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates\MvcTwitterBootstrap.vsix";
-            string solutionPath = @"C:\Work\MvcBootstrap";
+            string vsixFileName = txtFileName.Text;
+            string solutionPath = Path.GetDirectoryName(txtSolution.Text);
 
             var appTempPath = Path.Combine(Path.GetTempPath(), "VsixNugetifier");
 
@@ -69,6 +67,39 @@
                     }
                 }
             }
+        }
+
+        private void btnSelectFile_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "VSIX File|*.vsix|All Files (*.*)|*.*";
+            dialog.FileName = string.Empty;
+            dialog.InitialDirectory = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates";
+
+            if ((dialog.ShowDialog(this) ?? false))
+            {
+                txtFileName.Text = dialog.FileName;
+            }
+        }
+
+        private void btnChooseSolution_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Solution File|*.sln|All Files (*.*)|*.*";
+            dialog.FileName = string.Empty;
+            dialog.InitialDirectory = @"C:\Work";
+
+            if ((dialog.ShowDialog(this) ?? false))
+            {
+                txtSolution.Text = dialog.FileName;
+            }
+        }
+
+        private void txtFileName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            button1.IsEnabled =
+                !string.IsNullOrWhiteSpace(txtFileName.Text)
+                && !string.IsNullOrWhiteSpace(txtSolution.Text);
         }
     }
 }
