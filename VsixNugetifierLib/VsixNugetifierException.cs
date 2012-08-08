@@ -1,4 +1,4 @@
-﻿namespace NugetTemplateTools
+﻿namespace VsixNugetifierLib
 {
     using System;
     using System.Runtime.Serialization;

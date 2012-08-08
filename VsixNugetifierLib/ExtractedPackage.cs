@@ -32,7 +32,7 @@
             get { return this.extractedParts.Where(p => p.Package != null).Select(p => p.Package).ToList(); }
         }
 
-        public void UpdatePackages(string packagePath)
+        public void AddPackages(string packagePath)
         {
             var packageTargetFolder = Path.Combine(this.ExtractPath, "packages");
 
@@ -62,7 +62,7 @@
         {
             var manifestFileName = Path.Combine(this.ExtractPath, "extension.vsixmanifest");
 
-            var document = System.Xml.Linq.XDocument.Load(manifestFileName);
+            var document = XDocument.Load(manifestFileName);
             XNamespace ns = document.Root.GetDefaultNamespace();
             var content = document.Descendants(ns + "Content").Single();
 
@@ -108,7 +108,7 @@
             {
                 part.Package.UpdateTemplate(packageId, solutionPath, part.Part.UriString);
 
-                var newTemplate = PackageWrapper.Create(part.ExtractedFileName);
+                var newTemplate = PackageWrapper.CreateNew(part.ExtractedFileName);
                 newTemplate.AddDirectoryAndSave(part.Package.ExtractPath);
             }
         }

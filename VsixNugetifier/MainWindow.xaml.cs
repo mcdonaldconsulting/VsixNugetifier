@@ -25,13 +25,13 @@
 
                 var appTempPath = Path.Combine(Path.GetTempPath(), "VsixNugetifier");
 
-                var extractedPackage = ExtractPackage(vsixFileName, appTempPath);
+                var extractedPackage = PackageWrapper.Extract(vsixFileName, appTempPath);
 
                 DispayExtractResults(extractedPackage);
 
                 var packagePath = Path.Combine(solutionPath, "packages");
 
-                extractedPackage.UpdatePackages(packagePath);
+                extractedPackage.AddPackages(packagePath);
 
                 extractedPackage.UpdateContentTypes();
 
@@ -41,20 +41,14 @@
 
                 // Recreate the vsix
                 var newVsixFileName = Path.Combine(appTempPath, Path.GetFileName(vsixFileName));
-                var newPackage = PackageWrapper.Create(newVsixFileName);
-                newPackage.AddDirectoryAndSave(extractedPackage.ExtractPath);
+                using (var newPackage = PackageWrapper.CreateNew(newVsixFileName))
+                {
+                    newPackage.AddDirectoryAndSave(extractedPackage.ExtractPath);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, this.Title);
-            }
-        }
-
-        private static ExtractedPackage ExtractPackage(string path, string appTempPath)
-        {
-            using (var vsixPackage = PackageWrapper.Open(path))
-            {
-                return vsixPackage.Extract(appTempPath);
             }
         }
 
@@ -106,6 +100,12 @@
             button1.IsEnabled =
                 !string.IsNullOrWhiteSpace(txtFileName.Text)
                 && !string.IsNullOrWhiteSpace(txtSolution.Text);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtFileName.Text = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates\MvcTwitterBootstrap.vsix";
+            txtSolution.Text = @"C:\Work\MvcBootstrap\MvcBootstrap.sln";
         }
     }
 }
