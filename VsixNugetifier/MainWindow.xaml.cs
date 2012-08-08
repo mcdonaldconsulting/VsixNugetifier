@@ -31,13 +31,15 @@
 
                 var packagePath = Path.Combine(solutionPath, "packages");
 
+                var manifest = extractedPackage.UpdateManifest(packagePath);
+
                 extractedPackage.AddPackages(packagePath);
+
+                extractedPackage.UpdateViews(manifest);
 
                 extractedPackage.UpdateContentTypes();
 
-                var packageId = extractedPackage.UpdateManifest(packagePath);
-
-                extractedPackage.RepackageTemplates(packageId, solutionPath);
+                extractedPackage.RepackageTemplates(manifest.PackageId, solutionPath);
 
                 // Recreate the vsix
                 var newVsixFileName = Path.Combine(appTempPath, Path.GetFileName(vsixFileName));

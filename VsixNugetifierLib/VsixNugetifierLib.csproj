@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="ExtractedPart.cs" />
     <Compile Include="ExtractedPackage.cs" />
+    <Compile Include="Manifest.cs" />
     <Compile Include="MiscellaneousExtensions.cs" />
     <Compile Include="VsixNugetifierException.cs" />
     <Compile Include="PackageWrapper.cs" />

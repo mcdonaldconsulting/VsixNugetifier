@@ -27,6 +27,12 @@
             get { return this.extractedParts; }
         }
 
+        private IEnumerable<ExtractedPart> ExtractedPackages
+        {
+            get { return this.ExtractedParts.Where(p => p.Package != null); }
+        }
+
+
         public IList<ExtractedPackage> Packages
         {
             get { return this.extractedParts.Where(p => p.Package != null).Select(p => p.Package).ToList(); }
@@ -44,6 +50,49 @@
             }
         }
 
+        public void UpdateViews(Manifest manifest)
+        {
+            foreach (var part in this.ExtractedPackages)
+            {
+                var extractPath = part.Package.ExtractPath;
+                var viewsFolder = Path.Combine(extractPath, "views");
+
+                if (!Directory.Exists(viewsFolder))
+                {
+                    return;
+                }
+
+                var templateFileName = Path.Combine(extractPath, manifest.ProjectName + ".vstemplate");
+                var template = XDocument.Load(templateFileName);
+
+                var modelText = "@model " + manifest.ProjectName;
+
+                bool foundView = false;
+
+                foreach (var viewFileName in Directory.EnumerateFiles(viewsFolder, "*.cshtml", SearchOption.AllDirectories))
+                {
+                    var fileText = File.ReadAllText(viewFileName);
+                    if (fileText.Contains(modelText))
+                    {
+                        fileText = fileText.Replace(modelText, "@model $safeprojectname$");
+                        File.WriteAllText(viewFileName, fileText);
+
+                        template.Root.Descendants()
+                            .Where(d => !string.IsNullOrEmpty(d.Value))
+                            .Single(d => viewFileName.EndsWith(d.Value, StringComparison.OrdinalIgnoreCase))
+                            .SetAttributeValue("ReplaceParameters", "true");
+
+                        foundView = true;
+                    }
+                }
+
+                if (foundView)
+                {
+                    template.Save(templateFileName);
+                }
+            }
+        }
+
         public void UpdateContentTypes()
         {
             var contentTypesFileName = Path.Combine(this.ExtractPath, "[Content_Types].xml");
@@ -58,7 +107,7 @@
             contentTypes.Save(contentTypesFileName);
         }
 
-        public string UpdateManifest(string packagePath)
+        public Manifest UpdateManifest(string packagePath)
         {
             var manifestFileName = Path.Combine(this.ExtractPath, "extension.vsixmanifest");
 
@@ -68,6 +117,8 @@
 
             var identifier = document.Root.Elements(ns + "Identifier").Single();
             var packageId = identifier.Attribute("Id").Value;
+
+            var projectName = document.Root.Element(ns + "Content").Element(ns + "ProjectTemplate").Value;
 
             var references = document.Root.Elements(ns + "References").SingleOrDefault();
             if (references == null)
@@ -99,12 +150,12 @@
 
             document.Save(manifestFileName);
 
-            return packageId;
+            return new Manifest(packageId, projectName);
         }
 
         public void RepackageTemplates(string packageId, string solutionPath)
         {
-            foreach (var part in this.ExtractedParts.Where(p => p.Package != null))
+            foreach (var part in this.ExtractedPackages)
             {
                 part.Package.UpdateTemplate(packageId, solutionPath, part.Part.UriString);
 
