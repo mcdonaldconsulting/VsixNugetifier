@@ -65,7 +65,7 @@
                 var templateFileName = Path.Combine(extractPath, manifest.ProjectName + ".vstemplate");
                 var template = XDocument.Load(templateFileName);
 
-                var modelText = "@model " + manifest.ProjectName;
+                var modelText = manifest.ProjectName;
 
                 bool foundView = false;
 
@@ -74,7 +74,7 @@
                     var fileText = File.ReadAllText(viewFileName);
                     if (fileText.Contains(modelText))
                     {
-                        fileText = fileText.Replace(modelText, "@model $safeprojectname$");
+                        fileText = fileText.Replace(modelText, "$safeprojectname$");
                         File.WriteAllText(viewFileName, fileText);
 
                         template.Root.Descendants()
