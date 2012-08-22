@@ -107,7 +107,7 @@
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtFileName.Text = @"C:\Users\Patrick\Documents\Visual Studio 2010\My Exported Templates\MvcTwitterBootstrap.vsix";
-            txtSolution.Text = @"C:\Work\MvcBootstrap\MvcBootstrap.sln";
+            txtSolution.Text = @"C:\Work\MvcTwitterBootstrap\MvcTwitterBootstrap.sln";
         }
     }
 }

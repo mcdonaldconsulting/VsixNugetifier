@@ -69,7 +69,11 @@
 
                 bool foundView = false;
 
-                foreach (var viewFileName in Directory.EnumerateFiles(viewsFolder, "*.cshtml", SearchOption.AllDirectories))
+                var files = Directory.EnumerateFiles(viewsFolder, "*.cshtml", SearchOption.AllDirectories);
+                files = files.Union(Directory.EnumerateFiles(extractPath, "*.cs", SearchOption.AllDirectories));
+                files = files.Union(Directory.EnumerateFiles(extractPath, "*.asax", SearchOption.TopDirectoryOnly));
+
+                foreach (var viewFileName in files)
                 {
                     var fileText = File.ReadAllText(viewFileName);
                     if (fileText.Contains(modelText))
